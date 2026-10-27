@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Senior Care OS - لوحة التحكم الرقمية المبسطة</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome Icons CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Cairo & Tajawal -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            500: '#22c55e',
+                            600: '#16a34a',
+                            700: '#15803d',
+                            900: '#14532d',
+                        },
+                        senior: {
+                            bg: '#f8fafc',
+                            card: '#ffffff',
+                            accent: '#0284c7',
+                            danger: '#dc2626'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Cairo', 'Tajawal', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .high-contrast-text { color: #0f172a; }
+        .accessible-btn { min-height: 52px; min-width: 52px; }
+    </style>
+</head>
+<body class="bg-slate-100 font-sans text-slate-800 antialiased min-h-screen flex flex-col">
+
+    <!-- Top Navigation Header -->
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-40 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-12 h-12 rounded-xl bg-brand-600 text-white flex items-center justify-center text-2xl font-bold shadow-md">
+                    <i class="fa-solid fa-heart-pulse"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight" id="app-title">لوحة الرعاية الرقمية</h1>
+                    <p class="text-xs sm:text-sm text-slate-500 font-semibold" id="app-subtitle">بساطة، أمان، وخصوصية تامة 100%</p>
+                </div>
+            </div>
+
+            <!-- Controls: Language Selector & Config Button -->
+            <div class="flex items-center gap-3">
+                <!-- Language Picker -->
+                <select id="langSwitcher" onchange="changeLanguage(this.value)" class="bg-slate-100 border border-slate-300 text-slate-800 text-sm font-bold rounded-lg p-2.5 focus:ring-brand-500 focus:border-brand-500 cursor-pointer">
+                    <option value="ar" selected>العربية (AR)</option>
+                    <option value="en">English (EN)</option>
+                    <option value="fr">Français (FR)</option>
+                </select>
+
+                <!-- Setup / Customize Button -->
+                <button onclick="openSetupModal()" class="accessible-btn bg-brand-600 hover:bg-brand-700 text-white font-bold px-4 py-2 rounded-xl shadow transition flex items-center gap-2 text-base">
+                    <i class="fa-solid fa-gear text-lg"></i>
+                    <span id="btn-setup">تخصيص لوحتي</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+        <!-- Welcome Banner / Senior Profile Greeting -->
+        <section class="bg-white rounded-2xl p-6 sm:p-8 mb-8 border border-slate-200 shadow-sm flex flex-col md:flex-row items-center justify-between gap-6">
+            <div class="flex items-center gap-5">
+                <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-brand-100 text-brand-700 flex items-center justify-center text-3xl font-extrabold border-2 border-brand-500">
+                    <i class="fa-solid fa-user-check"></i>
+                </div>
+                <div>
+                    <div class="flex items-center gap-3 mb-1">
+                        <span class="bg-brand-100 text-brand-800 text-xs font-extrabold px-3 py-1 rounded-full border border-brand-300" id="badge-status">موزعة ومهيأة للخصوصية</span>
+                    </div>
+                    <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900" id="profile-greeting">مرحباً بك في لوحتك اليومية</h2>
+                    <p class="text-slate-600 text-base mt-1" id="profile-subtext">جميع بياناتك محفوظة داخل جهازك فقط، ولا يتم مشاركتها مع أي خادم خارجي.</p>
+                </div>
+            </div>
+            <button onclick="openSetupModal()" class="w-full md:w-auto bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold px-5 py-3 rounded-xl border border-slate-300 transition text-center" id="btn-edit-data">
+                <i class="fa-solid fa-pen-to-square ml-2"></i> تعديل المعلومات الشخصية
+            </button>
+        </section>
+
+        <!-- Dashboard Dynamic Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+
+            <!-- Card 1: Medication & Health -->
+            <div class="bg-white rounded-2xl border-2 border-slate-200 shadow-md p-6 flex flex-col justify-between">
+                <div>
+                    <div class="flex items-center justify-between pb-4 mb-4 border-b border-slate-100">
+                        <div class="flex items-center gap-3">
+                            <span class="w-12 h-12 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center text-xl font-bold">
+                                <i class="fa-solid fa-pills"></i>
+                            </span>
+                            <h3 class="text-xl font-extrabold text-slate-900" id="card-med-title">جدول الأدوية والصحة</h3>
+                        </div>
+                    </div>
+                    <p class="text-sm text-slate-500 mb-4" id="card-med-desc">الأدوية المحددة والمواعيد اليومية المنتظمة:</p>
+                    
+                    <div id="med-list" class="space-y-3">
+                        <!-- Dynamic Content Rendered Here -->
+                    </div>
+                </div>
+                <button onclick="openSetupModal()" class="mt-6 w-full py-3 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 font-bold rounded-xl text-center border border-emerald-200 transition" id="btn-update-med">
+                    تحديث الأدوية
+                </button>
+            </div>
+
+            <!-- Card 2: Bills & Tasks -->
+            <div class="bg-white rounded-2xl border-2 border-slate-200 shadow-md p-6 flex flex-col justify-between">
+                <div>
+                    <div class="flex items-center justify-between pb-4 mb-4 border-b border-slate-100">
+                        <div class="flex items-center gap-3">
+                            <span class="w-12 h-12 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center text-xl font-bold">
+                                <i class="fa-solid fa-file-invoice-dollar"></i>
+                            </span>
+                            <h3 class="text-xl font-extrabold text-slate-900" id="card-bills-title">الفواتير والالتزامات</h3>
+                        </div>
+                    </div>
+                    <p class="text-sm text-slate-500 mb-4" id="card-bills-desc">تتبع الفواتير والاشتراكات الواجب أداؤها:</p>
+                    
+                    <div id="bills-list" class="space-y-3">
+                        <!-- Dynamic Content Rendered Here -->
+                    </div>
+                </div>
+                <button onclick="openSetupModal()" class="mt-6 w-full py-3 bg-blue-50 hover:bg-blue-100 text-blue-800 font-bold rounded-xl text-center border border-blue-200 transition" id="btn-update-bills">
+                    إدارة الفواتير
+                </button>
+            </div>
+
+            <!-- Card 3: Emergency & Family Contacts -->
+            <div class="bg-white rounded-2xl border-2 border-slate-200 shadow-md p-6 flex flex-col justify-between">
+                <div>
+                    <div class="flex items-center justify-between pb-4 mb-4 border-b border-slate-100">
+                        <div class="flex items-center gap-3">
+                            <span class="w-12 h-12 rounded-xl bg-red-100 text-red-700 flex items-center justify-center text-xl font-bold">
+                                <i class="fa-solid fa-phone-volume"></i>
+                            </span>
+                            <h3 class="text-xl font-extrabold text-slate-900" id="card-contacts-title">اتصالات الطوارئ والعائلة</h3>
+                        </div>
+                    </div>
+                    <p class="text-sm text-slate-500 mb-4" id="card-contacts-desc">أرقام التواصل السريع المباشر بنقرة واحدة:</p>
+                    
+                    <div id="contacts-list" class="space-y-3">
+                        <!-- Dynamic Content Rendered Here -->
+                    </div>
+                </div>
+                <button onclick="openSetupModal()" class="mt-6 w-full py-3 bg-red-50 hover:bg-red-100 text-red-800 font-bold rounded-xl text-center border border-red-200 transition" id="btn-update-contacts">
+                    تعديل الاتصالات
+                </button>
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- Modal Form for Personalized Data Entry (Local Privacy First) -->
+    <div id="setupModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto p-6 sm:p-8 shadow-2xl border border-slate-200">
+            <div class="flex items-center justify-between pb-4 border-b border-slate-200 mb-6">
+                <h3 class="text-2xl font-bold text-slate-900" id="modal-title">تخصيص بيانات اللوحة</h3>
+                <button onclick="closeSetupModal()" class="text-slate-400 hover:text-slate-600 text-2xl font-bold">&times;</button>
+            </div>
+
+            <form id="dataForm" onsubmit="saveData(event)" class="space-y-6">
+                <!-- User / Senior Name -->
+                <div>
+                    <label class="block text-sm font-bold text-slate-700 mb-2" id="lbl-name">اسم المستخدم / المسن:</label>
+                    <input type="text" id="inputName" required class="w-full p-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-brand-500 focus:outline-none" placeholder="مثال: الحاج أحمد">
+                </div>
+
+                <!-- Medication Section -->
+                <div>
+                    <label class="block text-sm font-bold text-slate-700 mb-2" id="lbl-meds">الأدوية والمواعيد (افصل بينها بفاصلة):</label>
+                    <input type="text" id="inputMeds" class="w-full p-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-brand-500 focus:outline-none" placeholder="دواء الضغط (08:00 صباحاً), دواء السكر (01:00 ظهراً)">
+                </div>
+
+                <!-- Bills Section -->
+                <div>
+                    <label class="block text-sm font-bold text-slate-700 mb-2" id="lbl-bills">الفواتير والالتزامات (افصل بينها بفاصلة):</label>
+                    <input type="text" id="inputBills" class="w-full p-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-brand-500 focus:outline-none" placeholder="فاتورة الكهرباء, الاشتراك الطبي">
+                </div>
+
+                <!-- Contact Name & Phone -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-bold text-slate-700 mb-2" id="lbl-contact-name">اسم شخيص الطوارئ / الابن:</label>
+                        <input type="text" id="inputContactName" class="w-full p-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-brand-500 focus:outline-none" placeholder="الابن محمد">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold text-slate-700 mb-2" id="lbl-contact-phone">رقم الهاتف:</label>
+                        <input type="tel" id="inputContactPhone" class="w-full p-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-brand-500 focus:outline-none" placeholder="+212600000000">
+                    </div>
+                </div>
+
+                <!-- Submit Buttons -->
+                <div class="flex items-center justify-end gap-3 pt-4 border-t border-slate-200">
+                    <button type="button" onclick="closeSetupModal()" class="px-5 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl" id="btn-cancel">إلغاء</button>
+                    <button type="submit" class="px-6 py-3 bg-brand-600 hover:bg-brand-700 text-white font-bold rounded-xl shadow transition" id="btn-save">حفظ المعطيات فوراً</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- JavaScript Logic: LocalStorage Data Privacy & Language Translation -->
+    <script>
+        const translations = {
+            ar: {
+                title: "لوحة الرعاية الرقمية",
+                subtitle: "بساطة، أمان، وخصوصية تامة 100%",
+                badgeStatus: "موزعة ومهيأة للخصوصية",
+                btnSetup: "تخصيص لوحتي",
+                greeting: "مرحباً بك في لوحتك اليومية",
+                subtext: "جميع بياناتك محفوظة داخل جهازك فقط، ولا يتم مشاركتها مع أي خادم خارجي.",
+                btnEditData: "تعديل المعلومات الشخصية",
+                cardMedTitle: "جدول الأدوية والصحة",
+                cardMedDesc: "الأدوية المحددة والمواعيد اليومية المنتظمة:",
+                btnUpdateMed: "تحديث الأدوية",
+                cardBillsTitle: "الفواتير والالتزامات",
+                cardBillsDesc: "تتبع الفواتير والاشتراكات الواجب أداؤها:",
+                btnUpdateBills: "إدارة الفواتير",
+                cardContactsTitle: "اتصالات الطوارئ والعائلة",
+                cardContactsDesc: "أرقام التواصل السريع المباشر بنقرة واحدة:",
+                btnUpdateContacts: "تعديل الاتصالات",
+                modalTitle: "تخصيص بيانات اللوحة",
+                lblName: "اسم المستخدم / المسن:",
+                lblMeds: "الأدوية والمواعيد (افصل بينها بفاصلة):",
+                lblBills: "الفواتير والالتزامات (افصل بينها بفاصلة):",
+                lblContactName: "اسم شخص الطوارئ / الابن:",
+                lblContactPhone: "رقم الهاتف:",
+                btnCancel: "إلغاء",
+                btnSave: "حفظ المعطيات فوراً"
+            },
+            en: {
+                title: "Senior Care OS",
+                subtitle: "Simplicity, Security & 100% Privacy",
+                badgeStatus: "Privacy-First Local App",
+                btnSetup: "Customize Dashboard",
+                greeting: "Welcome to your Daily Dashboard",
+                subtext: "All your personal data is stored locally on your device and never shared with external servers.",
+                btnEditData: "Edit Personal Information",
+                cardMedTitle: "Medication & Health",
+                cardMedDesc: "Scheduled medication and daily routines:",
+                btnUpdateMed: "Update Medications",
+                cardBillsTitle: "Bills & Utilities",
+                cardBillsDesc: "Track upcoming bills and active subscriptions:",
+                btnUpdateBills: "Manage Bills",
+                cardContactsTitle: "Emergency & Contacts",
+                cardContactsDesc: "One-tap direct quick dialing:",
+                btnUpdateContacts: "Edit Contacts",
+                modalTitle: "Personalize Dashboard Data",
+                lblName: "User / Senior Name:",
+                lblMeds: "Medications & Times (comma separated):",
+                lblBills: "Bills & Utilities (comma separated):",
+                lblContactName: "Emergency Contact Name:",
+                lblContactPhone: "Phone Number:",
+                btnCancel: "Cancel",
+                btnSave: "Save Data Locally"
+            },
+            fr: {
+                title: "Senior Care OS",
+                subtitle: "Simplicité, Sécurité & Confidentialité 100%",
+                badgeStatus: "Application Locale Privée",
+                btnSetup: "Personnaliser",
+                greeting: "Bienvenue sur votre Tableau de Bord",
+                subtext: "Toutes vos données sont stockées uniquement sur votre appareil.",
+                btnEditData: "Modifier les informations",
+                cardMedTitle: "Médicaments & Santé",
+                cardMedDesc: "Horaires des médicaments et routines:",
+                btnUpdateMed: "Mettre à jour",
+                cardBillsTitle: "Factures & Services",
+                cardBillsDesc: "Suivi des factures et abonnements:",
+                btnUpdateBills: "Gérer les factures",
+                cardContactsTitle: "Urgences & Contacts",
+                cardContactsDesc: "Appel rapide en un clic:",
+                btnUpdateContacts: "Modifier les contacts",
+                modalTitle: "Personnaliser les données",
+                lblName: "Nom de l'utilisateur:",
+                lblMeds: "Médicaments (séparés par des virgules):",
+                lblBills: "Factures (séparées par des virgules):",
+                lblContactName: "Nom du contact d'urgence:",
+                lblContactPhone: "Numéro de téléphone:",
+                btnCancel: "Annuler",
+                btnSave: "Enregistrer localement"
+            }
+        };
+
+        // Default Data State
+        let defaultData = {
+            name: "الحاج أحمد",
+            meds: ["دواء الضغط (08:00 صباحاً)", "دواء السكر (01:00 ظهراً)"],
+            bills: ["فاتورة الكهرباء والماء", "الاشتراك الطبي الشهري"],
+            contactName: "الابن محمد",
+            contactPhone: "+212600000000"
+        };
+
+        // Load data from LocalStorage
+        function loadData() {
+            const saved = localStorage.getItem('senior_care_os_data');
+            return saved ? JSON.parse(saved) : defaultData;
+        }
+
+        // Render Data into Dashboard Cards
+        function renderDashboard() {
+            const data = loadData();
+            
+            // Render Name
+            document.getElementById('profile-greeting').textContent = `${translations[currentLang].greeting} - ${data.name}`;
+
+            // Render Medications
+            const medList = document.getElementById('med-list');
+            medList.innerHTML = data.meds.map(med => `
+                <div class="p-3 bg-emerald-50 rounded-xl border border-emerald-200 flex items-center justify-between">
+                    <span class="font-bold text-slate-800">${med}</span>
+                    <i class="fa-solid fa-check-circle text-emerald-600 text-lg"></i>
+                </div>
+            `).join('');
+
+            // Render Bills
+            const billsList = document.getElementById('bills-list');
+            billsList.innerHTML = data.bills.map(bill => `
+                <div class="p-3 bg-blue-50 rounded-xl border border-blue-200 flex items-center justify-between">
+                    <span class="font-bold text-slate-800">${bill}</span>
+                    <span class="text-xs bg-blue-200 text-blue-800 font-bold px-2 py-1 rounded-md">في الانتظار</span>
+                </div>
+            `).join('');
+
+            // Render Contact
+            const contactsList = document.getElementById('contacts-list');
+            contactsList.innerHTML = `
+                <a href="tel:${data.contactPhone}" class="p-4 bg-red-50 hover:bg-red-100 rounded-xl border border-red-200 flex items-center justify-between transition block">
+                    <div>
+                        <div class="font-extrabold text-slate-900">${data.contactName}</div>
+                        <div class="text-xs text-slate-500">${data.contactPhone}</div>
+                    </div>
+                    <span class="w-10 h-10 bg-red-600 text-white rounded-full flex items-center justify-center font-bold">
+                        <i class="fa-solid fa-phone"></i>
+                    </span>
+                </a>
+            `;
+        }
+
+        // Save Form Data to LocalStorage
+        function saveData(e) {
+            e.preventDefault();
+            const newData = {
+                name: document.getElementById('inputName').value,
+                meds: document.getElementById('inputMeds').value.split(',').map(s => s.trim()).filter(Boolean),
+                bills: document.getElementById('inputBills').value.split(',').map(s => s.trim()).filter(Boolean),
+                contactName: document.getElementById('inputContactName').value,
+                contactPhone: document.getElementById('inputContactPhone').value
+            };
+            localStorage.setItem('senior_care_os_data', JSON.stringify(newData));
+            closeSetupModal();
+            renderDashboard();
+        }
+
+        // Modal Controls
+        function openSetupModal() {
+            const data = loadData();
+            document.getElementById('inputName').value = data.name || '';
+            document.getElementById('inputMeds').value = (data.meds || []).join(', ');
+            document.getElementById('inputBills').value = (data.bills || []).join(', ');
+            document.getElementById('inputContactName').value = data.contactName || '';
+            document.getElementById('inputContactPhone').value = data.contactPhone || '';
+            document.getElementById('setupModal').classList.remove('hidden');
+        }
+
+        function closeSetupModal() {
+            document.getElementById('setupModal').classList.add('hidden');
+        }
+
+        // Multi-Language Switcher Logic
+        let currentLang = 'ar';
+        function changeLanguage(lang) {
+            currentLang = lang;
+            const html = document.documentElement;
+            const t = translations[lang];
+
+            if (lang === 'ar') {
+                html.setAttribute('dir', 'rtl');
+                html.setAttribute('lang', 'ar');
+            } else {
+                html.setAttribute('dir', 'ltr');
+                html.setAttribute('lang', lang);
+            }
+
+            document.getElementById('app-title').textContent = t.title;
+            document.getElementById('app-subtitle').textContent = t.subtitle;
+            document.getElementById('badge-status').textContent = t.badgeStatus;
+            document.getElementById('btn-setup').textContent = t.btnSetup;
+            document.getElementById('profile-subtext').textContent = t.subtext;
+            document.getElementById('btn-edit-data').textContent = t.btnEditData;
+            document.getElementById('card-med-title').textContent = t.cardMedTitle;
+            document.getElementById('card-med-desc').textContent = t.cardMedDesc;
+            document.getElementById('btn-update-med').textContent = t.btnUpdateMed;
+            document.getElementById('card-bills-title').textContent = t.cardBillsTitle;
+            document.getElementById('card-bills-desc').textContent = t.cardBillsDesc;
+            document.getElementById('btn-update-bills').textContent = t.btnUpdateBills;
+            document.getElementById('card-contacts-title').textContent = t.cardContactsTitle;
+            document.getElementById('card-contacts-desc').textContent = t.cardContactsDesc;
+            document.getElementById('btn-update-contacts').textContent = t.btnUpdateContacts;
+            document.getElementById('modal-title').textContent = t.modalTitle;
+            document.getElementById('lbl-name').textContent = t.lblName;
+            document.getElementById('lbl-meds').textContent = t.lblMeds;
+            document.getElementById('lbl-bills').textContent = t.lblBills;
+            document.getElementById('lbl-contact-name').textContent = t.lblContactName;
+            document.getElementById('lbl-contact-phone').textContent = t.lblContactPhone;
+            document.getElementById('btn-cancel').textContent = t.btnCancel;
+            document.getElementById('btn-save').textContent = t.btnSave;
+
+            renderDashboard();
+        }
+
+        // Initialize App on Load
+        window.addEventListener('DOMContentLoaded', () => {
+            renderDashboard();
+        });
+    </script>
+</body>
+</html>
